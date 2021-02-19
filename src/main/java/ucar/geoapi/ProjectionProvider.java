@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import ucar.nc2.constants.CF;
 import ucar.unidata.util.Parameter;
 import ucar.unidata.geoloc.Projection;
-import ucar.unidata.geoloc.ProjectionImpl;
 import ucar.unidata.geoloc.projection.*;
 
 import org.opengis.util.GenericName;
@@ -203,7 +202,7 @@ abstract class ProjectionProvider<P extends Projection> extends NetcdfIdentified
                 return NetcdfParameter.create(name, alias, "true");
             }
             case CF.EARTH_RADIUS: {
-                defaultValue = ProjectionImpl.EARTH_RADIUS;
+                defaultValue = ucar.unidata.geoloc.ProjectionImpl.EARTH_RADIUS;
                 break;
             }
             default: {

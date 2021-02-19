@@ -20,10 +20,8 @@ import java.util.Collection;
 import ucar.unidata.util.Parameter;
 import ucar.unidata.geoloc.LatLonRect;
 import ucar.unidata.geoloc.LatLonPoint;
-import ucar.unidata.geoloc.LatLonPointImpl;
 import ucar.unidata.geoloc.Projection;
 import ucar.unidata.geoloc.ProjectionPoint;
-import ucar.unidata.geoloc.ProjectionPointImpl;
 import ucar.unidata.geoloc.projection.ProjectionAdapter;
 
 import org.opengis.metadata.extent.Extent;
@@ -236,9 +234,9 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
      *
      * <p>This method delegates to one of the following methods:</p>
      * <ul>
-     *   <li>{@link Projection#latLonToProj(LatLonPoint, ProjectionPointImpl)}
+     *   <li>{@link Projection#latLonToProj(LatLonPoint)}
      *       for the forward projection.</li>
-     *   <li>{@link Projection#projToLatLon(ProjectionPoint, LatLonPointImpl)}
+     *   <li>{@link Projection#projToLatLon(ProjectionPoint)}
      *       for the inverse projection.</li>
      * </ul>
      *
@@ -258,11 +256,11 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
         double x = ptSrc.getOrdinate(0);
         double y = ptSrc.getOrdinate(1);
         if (isInverse) {
-            final LatLonPoint pt = projection.projToLatLon(new ProjectionPointImpl(x, y), new LatLonPointImpl());
+            final LatLonPoint pt = projection.projToLatLon(ProjectionPoint.create(x, y));
             x = pt.getLongitude();
             y = pt.getLatitude();
         } else {
-            final ProjectionPoint pt = projection.latLonToProj(new LatLonPointImpl(y, x), new ProjectionPointImpl());
+            final ProjectionPoint pt = projection.latLonToProj(LatLonPoint.create(y, x));
             x = pt.getX();
             y = pt.getY();
         }
@@ -284,9 +282,9 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
      *
      * <p>This method delegates to one of the following methods:</p>
      * <ul>
-     *   <li>{@link Projection#latLonToProj(LatLonPoint, ProjectionPointImpl)}
+     *   <li>{@link Projection#latLonToProj(LatLonPoint)}
      *       for the forward projection.</li>
-     *   <li>{@link Projection#projToLatLon(ProjectionPoint, LatLonPointImpl)}
+     *   <li>{@link Projection#projToLatLon(ProjectionPoint)}
      *       for the inverse projection.</li>
      * </ul>
      *
@@ -302,11 +300,11 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
         double x = ptSrc.getX();
         double y = ptSrc.getY();
         if (isInverse) {
-            final LatLonPoint pt = projection.projToLatLon(new ProjectionPointImpl(x, y), new LatLonPointImpl());
+            final LatLonPoint pt = projection.projToLatLon(ProjectionPoint.create(x, y));
             x = pt.getLongitude();
             y = pt.getLatitude();
         } else {
-            final ProjectionPoint pt = projection.latLonToProj(new LatLonPointImpl(y, x), new ProjectionPointImpl());
+            final ProjectionPoint pt = projection.latLonToProj(LatLonPoint.create(y, x));
             x = pt.getX();
             y = pt.getY();
         }
@@ -360,8 +358,8 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
      * This method delegates to one of the following methods for each point:
      *
      * <ul>
-     *   <li>{@link Projection#latLonToProj(LatLonPoint, ProjectionPointImpl)} for the forward projection.</li>
-     *   <li>{@link Projection#projToLatLon(ProjectionPoint, LatLonPointImpl)} for the inverse projection.</li>
+     *   <li>{@link Projection#latLonToProj(LatLonPoint)} for the forward projection.</li>
+     *   <li>{@link Projection#projToLatLon(ProjectionPoint)} for the inverse projection.</li>
      * </ul>
      */
     @Override
@@ -374,17 +372,13 @@ final class NetcdfProjection extends NetcdfIdentifiedObject
             srcPts = Arrays.copyOfRange(srcPts, srcOff, srcOff + numPts*srcDim);
             srcOff = 0;
         }
-        final LatLonPointImpl     src = new LatLonPointImpl();
-        final ProjectionPointImpl dst = new ProjectionPointImpl();
         while (--numPts >= 0) {
             if (isInverse) {
-                dst.setLocation(srcPts[srcOff], srcPts[srcOff+1]);
-                final LatLonPoint pt = projection.projToLatLon(dst, src);
+                final LatLonPoint pt = projection.projToLatLon(srcPts[srcOff], srcPts[srcOff+1]);
                 dstPts[dstOff]   = pt.getLongitude();
                 dstPts[dstOff+1] = pt.getLatitude();
             } else {
-                src.set(srcPts[srcOff+1], srcPts[srcOff]);                          // (lat,lon)
-                final ProjectionPoint pt = projection.latLonToProj(src, dst);
+                final ProjectionPoint pt = projection.latLonToProj(srcPts[srcOff+1], srcPts[srcOff]);
                 dstPts[dstOff  ] = pt.getX();
                 dstPts[dstOff+1] = pt.getY();
             }

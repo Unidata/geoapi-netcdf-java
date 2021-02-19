@@ -8,6 +8,8 @@ package ucar.geoapi;
 
 import java.io.IOException;
 import ucar.nc2.NetcdfFile;
+import ucar.nc2.NetcdfFiles;
+import ucar.nc2.dataset.NetcdfDataset;
 
 
 /**
@@ -39,6 +41,17 @@ abstract strictfp class IOTestCase {
          */
         String location = file.location().toString();
         location = location.substring(location.lastIndexOf('/') + 1);
-        return NetcdfFile.openInMemory(location, file.content());
+        return NetcdfFiles.openInMemory(location, file.content());
+    }
+
+    /**
+     * Opens the given netCDF file as a dataset.
+     *
+     * @param  file  one of the {@code NETCDF_*} enumeration constants.
+     * @return the netCDF dataset.
+     * @throws IOException if an error occurred while opening the dataset.
+     */
+    final NetcdfDataset openDataset(final TestData file) throws IOException {
+        return new NetcdfDataset(open(file));
     }
 }

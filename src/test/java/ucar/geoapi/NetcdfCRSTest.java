@@ -239,7 +239,7 @@ public final strictfp class NetcdfCRSTest extends IOTestCase {
      */
     @Test
     public void testGeographic2D() throws IOException {
-        try (NetcdfDataset file = new NetcdfDataset(open(TestData.NETCDF_2D_GEOGRAPHIC))) {
+        try (NetcdfDataset file = openDataset(TestData.NETCDF_2D_GEOGRAPHIC)) {
             crs = wrap(assertSingleton(file.getCoordinateSystems()), file);
             assertInstanceOf("Expected a geographic CRS.", GeographicCRS.class, crs);
             final EllipsoidalCS ellp = ((GeographicCRS) crs).getCoordinateSystem();
@@ -272,7 +272,7 @@ public final strictfp class NetcdfCRSTest extends IOTestCase {
      */
     @Test
     public void testProjected4D() throws IOException {
-        try (NetcdfDataset file = new NetcdfDataset(open(TestData.NETCDF_4D_PROJECTED))) {
+        try (NetcdfDataset file = openDataset(TestData.NETCDF_4D_PROJECTED)) {
             final List<CoordinateSystem> crsList = file.getCoordinateSystems();
             assertEquals("Unexpected number of netCDF coordinate systems.", 1, crsList.size());
             crs = wrap(crsList.get(0), file);

@@ -76,8 +76,8 @@
     </dependency>
     <dependency>
       <groupId>edu.ucar</groupId>
-      <artifactId>cdm</artifactId>
-      <version>4.6.15</version>
+      <artifactId>cdm-core</artifactId>
+      <version>5.4.1</version>
     </dependency>
     <dependency>
       <groupId>org.opengis</groupId>
