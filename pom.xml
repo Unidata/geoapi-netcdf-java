@@ -64,7 +64,8 @@
     <geoapi.version>3.0.1</geoapi.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <website.encoding>UTF-8</website.encoding>
-    <maven.compiler.release>8</maven.compiler.release>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
   </properties>
 
   <dependencies>
@@ -183,13 +184,17 @@
           <keywords>true</keywords>
           <breakiterator>true</breakiterator>
           <additionalOptions>
-            -html5 -Xdoclint:syntax --add-stylesheet "${basedir}/src/main/javadoc/geoapi.css"
+            -Xdoclint:all
           </additionalOptions>
           <tags>
             <tag>
               <placement>tfmc</placement>
               <name>todo</name>
               <head>TODO:</head>
+            </tag>
+            <tag>
+              <placement>X</placement>
+              <name>hidden</name>
             </tag>
           </tags>
         </configuration>
