@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>edu.ucar</groupId>
+  <artifactId>geoapi-netcdf-java</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <name>GeoAPI wrapper for UCAR netCDF library</name>
+  <url>https://github.com/Unidata/geoapi-netcdf-java</url>
+  <description>
+    A netCDF-Java based implementation of the Open Geospatial Consortium (OGC) GeoAPI standard.
+  </description>
+
+  <organization>
+    <name>Unidata</name>
+    <url>https://www.unidata.ucar.edu</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>BSD-3-Clause</name>
+      <url>https://raw.githubusercontent.com/Unidata/geoapi-netcdf-java/main/LICENSE</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:https://github.com/Unidata/geoapi-netcdf-java</connection>
+    <url>https://github.com/Unidata/geoapi-netcdf-java</url>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub</system>
+    <url>https://github.com/Unidata/geoapi-netcdf-java/issues</url>
+  </issueManagement>
+
+  <developers>
+    <developer>
+      <name>Sean Arms</name>
+      <id>lesserwhirls</id>
+      <organization>Unidata</organization>
+      <organizationUrl>https://www.unidata.ucar.edu</organizationUrl>
+      <roles>
+        <role>Java developer</role>
+        <role>Administrator</role>
+      </roles>
+    </developer>
+    <developer>
+      <name>Martin Desruisseaux</name>
+      <id>desruisseaux</id>
+      <organization>Geomatys</organization>
+      <organizationUrl>https://www.geomatys.com</organizationUrl>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Java developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <properties>
+    <geoapi.version>3.0.1</geoapi.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <website.encoding>UTF-8</website.encoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.opengis</groupId>
+      <artifactId>geoapi</artifactId>
+      <version>${geoapi.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>edu.ucar</groupId>
+      <artifactId>cdm-core</artifactId>
+      <version>5.4.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.opengis</groupId>
+      <artifactId>geoapi-conformance</artifactId>
+      <version>${geoapi.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>tec.units</groupId>
+      <artifactId>unit-ri</artifactId>
+      <version>1.0.3</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>UCAR</id>
+      <name>UCAR repository</name>
+      <url>https://artifacts.unidata.ucar.edu/repository/unidata-releases</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.0.0-M5</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <addClasspath>true</addClasspath>
+            </manifest>
+            <manifestEntries>
+              <Specification-Title>OGC GeoAPI</Specification-Title>
+              <Specification-Version>${geoapi.version}</Specification-Version>
+              <Specification-Vendor>Open Geospatial Consortium</Specification-Vendor>
+              <Implementation-Vendor>Unidata</Implementation-Vendor>
+              <Implementation-URL>https://github.com/Unidata/geoapi-netcdf-java</Implementation-URL>
+              <Automatic-Module-Name>ucar.geoapi</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <docencoding>${website.encoding}</docencoding>
+          <charset>${website.encoding}</charset>
+          <author>false</author>
+          <version>false</version>
+          <noqualifier>all</noqualifier>
+          <quiet>true</quiet>
+          <locale>en</locale>
+          <keywords>true</keywords>
+          <breakiterator>true</breakiterator>
+          <additionalOptions>
+            -Xdoclint:all
+          </additionalOptions>
+          <tags>
+            <tag>
+              <placement>tfmc</placement>
+              <name>todo</name>
+              <head>TODO:</head>
+            </tag>
+            <tag>
+              <placement>X</placement>
+              <name>hidden</name>
+            </tag>
+          </tags>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
