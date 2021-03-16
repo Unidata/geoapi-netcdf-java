@@ -1,0 +1,42 @@
+name: Test geoapi netcdf-java wrappers
+
+on:
+  pull_request:
+    branches: [ main ]
+
+  # allows for running the workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  tests-adpotopenjdk-hs:
+    name: geoapi-netcdf-java Tests (AdoptiumJDK-HS)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # test against latest Adoptium LTS releases, as well as the latest non-LTS release
+        java: [ 8, 11, 15 ]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Fetch latest Adoptium JDK ${{ matrix.java }} (hotspot) built for linux
+        run: curl -L "https://api.adoptopenjdk.net/v3/binary/latest/${{ matrix.java }}/ga/linux/x64/jdk/hotspot/normal/adoptopenjdk" -o aojdk${{ matrix.java }}-hs.tar.gz
+      - name: Setup Latest Adoptium JDK (hotspot) ${{ matrix.java }}
+        uses: actions/setup-java@master
+        with:
+          java-version: ${{ matrix.java }}
+          architecture: x64
+          jdkFile: ./aojdk${{ matrix.java }}-hs.tar.gz
+      - name: Print java version
+        run: java -version
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and test with mvn
+        run: mvn --batch-mode --update-snapshots verify
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: geoapi-netcdf-java_JUnit_Results_${{ github.sha }}Adoptium-HS-${{ matrix.java }}
+          path: target/surefire-reports
